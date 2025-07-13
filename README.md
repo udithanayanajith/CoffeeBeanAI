@@ -113,7 +113,7 @@ The repository includes training scripts for both image classification models:
 
 ## Requirements
 
-- Python 3.7+
+- Python 3.11.13+
 - Flask
 - PyTorch
 - Transformers
