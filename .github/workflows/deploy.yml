@@ -1,0 +1,41 @@
+name: Deploy Flask AI App to ECS Ubuntu
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.10
+
+    - name: Install dependencies
+      run: |
+        pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install gdown
+
+    - name: Download AI models
+      run: bash download_models.sh
+
+    - name: SSH and Deploy to ECS
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.ECS_HOST }}
+        username: ${{ secrets.ECS_USER }}
+        key: ${{ secrets.ECS_SSH_KEY }}
+        script: |
+          cd /home/ubuntu/your-flask-app
+          git pull origin main
+          pip install -r requirements.txt
+          pip install gdown
+          bash download_models.sh
+          sudo systemctl restart flaskapp
