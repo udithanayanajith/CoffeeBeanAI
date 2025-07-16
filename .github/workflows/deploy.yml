@@ -12,11 +12,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install Python dependencies
+      - name: Setup Python virtual environment & install dependencies
         run: |
-          pip install --upgrade pip --break-system-packages
+          python3 -m venv venv
+          source venv/bin/activate
+          pip install --upgrade pip
           pip install -r requirements.txt
 
       - name: Restart Flask systemd service
-        run: |
-          sudo systemctl restart flaskapp
+        run: sudo systemctl restart flaskapp
