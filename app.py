@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from PIL import Image
 import io
+from flask_cors import CORS
 import torch
 from transformers import ViTForImageClassification
 from torchvision import transforms
@@ -12,6 +13,8 @@ import warnings
 warnings.filterwarnings("ignore", category=FutureWarning)
 
 app = Flask(__name__)
+CORS(app)
+
 
 # Device configuration
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
